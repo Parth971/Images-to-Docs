@@ -59,3 +59,9 @@ Default value is generated from current time
 ```
 filename = f'testing_{current_time.hour}_{current_time.minute}_{current_time.second}.docx'
 ```
+
+### Screenshots
+![Screenshot](https://github.com/Parth971/Images-to-Docs/blob/main/Screenshots/Image1.png)
+![Screenshot](https://github.com/Parth971/Images-to-Docs/blob/main/Screenshots/Image2.png)
+![Screenshot](https://github.com/Parth971/Images-to-Docs/blob/main/Screenshots/Image3.png)
+![Screenshot](https://github.com/Parth971/Images-to-Docs/blob/main/Screenshots/Image4.png)
