@@ -12,37 +12,49 @@ BASE_DIR = Path(__file__).resolve().parent
 class CreateDocument:
     def __init__(self, filename, image_width):
         self.my_doc = docx.Document()
-        self.table = self.my_doc.add_table(rows=0, cols=2)
-        self.table.style = 'Table Grid'
         self.filename = filename
         self.image_width = image_width
 
-    def set_data(self, initial_data):
+    def set_data(self, initial_data, table):
         for i in range(0, len(initial_data), 2):
-            row_cells_label = self.table.add_row().cells
-            row_cells_image = self.table.add_row().cells
+            row_cells_label = table.add_row().cells
+            row_cells_image = table.add_row().cells
+
+            if len(initial_data) == 1:
+                row_cells_label[0].merge(row_cells_label[1])
+                row_cells_image[0].merge(row_cells_image[1])
 
             row_cells_label[0].text = f"{initial_data[i][0]}"
             paragraph = row_cells_image[0].paragraphs[0]
+            paragraph.alignment = 1
             run = paragraph.add_run()
             run.add_picture(initial_data[i][1], width=self.image_width)
 
             if i + 1 < len(initial_data):
                 row_cells_label[1].text = f"{initial_data[i + 1][0]}"
                 paragraph = row_cells_image[1].paragraphs[0]
+                paragraph.alignment = 1
                 run = paragraph.add_run()
                 run.add_picture(initial_data[i + 1][1], width=self.image_width)
+        # self.table.add_row()
 
     def set_file_data(self, initial_data):
-        for file_name_without_extension in sorted(initial_data.keys()):
+        file_names = sorted(initial_data.keys())
+        for file_name_without_extension in file_names:
+            table = self.my_doc.add_table(rows=0, cols=2)
+            table.style = 'Table Grid'
+
             file_data = initial_data[file_name_without_extension]
-            row_cells = self.table.add_row().cells
+            row_cells = table.add_row().cells
             row_cells[0].merge(row_cells[1])
             row_cells[0].text = file_name_without_extension
             p = row_cells[0].paragraphs[0]
             p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
-            self.set_data(file_data)
+            self.set_data(file_data, table)
+
+            if file_name_without_extension != file_names[-1]:
+                self.my_doc.add_page_break()
 
         self.my_doc.save(str(BASE_DIR / self.filename))
 
@@ -67,8 +79,6 @@ if __name__ == '__main__':
 
     width = Inches(2.8)
 
-    create_docs = CreateDocument(
-        filename=filename,
-        image_width=width
-    )
+    current_time = datetime.now().time()
+    create_docs = CreateDocument(filename=filename, image_width=width)
     create_docs.set_file_data(data)
