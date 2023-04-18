@@ -48,11 +48,15 @@ class CreateDocument:
 
 
 if __name__ == '__main__':
+    current_time = datetime.now().time()
+
     args = (
         ('My 1', r"/home/root366/Dump/GITHUB/Images-to-Docs/abc"),
         ('My 2', r"/home/root366/Dump/GITHUB/Images-to-Docs/vcc"),
         ('My 3', r"/home/root366/Dump/GITHUB/Images-to-Docs/mvp"),
     )
+    filename = f'testing_{current_time.hour}_{current_time.minute}_{current_time.second}.docx'
+
     data = {}
     for folder_name, folder_path in args:
         files = os.listdir(folder_path)
@@ -63,9 +67,8 @@ if __name__ == '__main__':
 
     width = Inches(2.8)
 
-    current_time = datetime.now().time()
     create_docs = CreateDocument(
-        filename=f'testing_{current_time.hour}_{current_time.minute}_{current_time.second}.docx',
+        filename=filename,
         image_width=width
     )
     create_docs.set_file_data(data)
